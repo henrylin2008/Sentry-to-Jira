@@ -13,9 +13,6 @@ Please be reminded that this feature is NOT intended to replace Prometheus alert
 ### Is this agent applicable to all projects?
 This agent is only intended to solve tracking issues in a repo with mixed ownership from completely different organizations or teams. [clroot repo](https://github.com/ContextLogic/clroot) is a typical example of such candidate. If your service is outside clroot and your own Sentry project, you can simply install existing plugins offered by Sentry to perform actions on issues automatically. There are already a variety of [plugins](https://github.com/getsentry/sentry/tree/master/src/sentry_plugins) to do this for you.  
 
-### How to onboard?
-If you are interested in using the tool, please file a ticket and assign to @kwei. We aim to onboard new users within 2 business days.
-
 ### How do you avoid duplicated tickets? 
 Before creating tickets, our agent would search for Jira by the Sentry issue link (i.e. https://sentry.infra.wish.com/sentry/merchant-external-api/issues/367814/). If there are not issues with an active status (i.e. "Need Triage", "In progress", "Ready for Eng"), the agent would go ahead creating a new close. This means closing the ticket alone in Jira is not enough to fully resolve a Sentry issue -- feature owners need to either release a fix or communicate with our team to avoid cutting tickets for certain exceptions.
 
