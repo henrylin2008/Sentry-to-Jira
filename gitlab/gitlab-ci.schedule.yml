@@ -1,0 +1,29 @@
+## Schedule - Emit metrics for issue count
+schedule:sentry_issue_counts_metrics:
+  stage: schedule
+  image: $CI_REGISTRY/contextlogic/sentry-alert-notifier:master
+  script:
+    - export HOME=$(pwd)
+    - START_TIME=$SECONDS
+    - python $HOME/scripts/sentry_issues_report.py --sentry-api-key "${SENTRY_API_KEY}"
+    - echo 'marketplace_sentry_issues_count_runtime_seconds' $((SECONDS-START_TIME)) | curl --data-binary @- http://pushgateway.infra.wish.com:9091/metrics/job/gitlab
+    # push prometheus metric
+    - echo 'marketplace_sentry_issues_count_success_timestamp' $(date -u +%s) | curl --data-binary @- http://pushgateway.infra.wish.com:9091/metrics/job/gitlab
+  only:
+    refs:
+      - schedules
+    variables:
+      - $SCHEDULE == "sentry_issue_counts_metrics"
+
+## Schedule - Count Sentry Errors on a Team Basis
+schedule:sentry_issue_team_metrics:
+  stage: schedule
+  image: $CI_REGISTRY/contextlogic/sentry-alert-notifier:master
+  script:
+    - export HOME=$(pwd)
+    - python $HOME/scripts/sentry_team_metrics.py --sentry-api-key="${SENTRY_API_KEY}"\
+  only:
+    refs:
+      - schedules
+    variables:
+      - $SCHEDULE == "sentry_issue_team_metrics"
